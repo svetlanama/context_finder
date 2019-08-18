@@ -1,1 +1,4 @@
-# context_finder
+# run
+```
+python3 context_finder.py
+```

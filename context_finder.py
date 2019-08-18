@@ -19,15 +19,16 @@ from core import (
     files
 )
 
-InputFolder = 'input-DMKD-300'
+FeaturesFolder = 'input-DMKD-300'
+ContextFolder = 'DATASET' #TIME
 
 current_folder = os.path.dirname(os.path.abspath(__file__))
 print('current_folder:',current_folder)
 
-# TODO: input_files = files.load_list
+# load features
 input_files = files.load_list(
         path=current_folder,
-        folder=InputFolder #config['IO']['InputFolder']
+        folder=FeaturesFolder #config['IO']['InputFolder']
     )
 files_list=input_files
 
@@ -43,9 +44,39 @@ def read_tokens(input_file):
 
 # read tokens
 for file in files_list:
-        print('file:', file)
         input_tokens = read_tokens(
             input_file=file
         )
 
 print('input_tokens:', input_tokens)
+
+###########################
+###### load contexts #######
+###########################
+for token in input_tokens:
+        print('token:', token)
+
+# load features
+input_context_data = files.load_list(
+        path=current_folder,
+        folder=ContextFolder #config['IO']['InputFolder']
+    )
+print("input_context_data: ",input_context_data)
+input_context_files = input_context_data
+
+def find_contexts(input_file, token):
+        return list(
+            files.search_contexts_in_file(
+                filename=input_file.path,token=token
+            )
+        )
+
+# read contexts
+for token in input_tokens:
+        #print('token:', token)
+        for file in input_context_files:
+                #print('file:', token)
+                input_contexts = find_contexts(
+                    input_file=file, token=token
+                )
+        print("input_contexts: ",input_contexts)

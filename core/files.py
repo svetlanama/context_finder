@@ -20,6 +20,30 @@ def system_slash():
     return '/'
 
 
+def search_contexts_in_file(filename: str, token: Token) -> Token:
+    contexts  = []
+    with open(filename, mode='r') as datafile:
+        reader = csv.reader(datafile, delimiter='.')
+
+        try:
+            for row in reader:
+                #print("row: ", row)
+                if token.term in str(row):
+                    #print("row: ", row)
+                    contexts.append(row)
+
+        except Exception as e:
+              print("")
+              #print("Exception read: ",e)
+
+    #print("contexts: ", contexts)
+    yield Token(
+        term=token.term,
+        value=token.value,
+        convergence=token.convergence,
+        contexts=contexts
+    )
+
 def read_file(filename: str, delimiter: str = ';') -> Iterator[Token]:
     with open(filename, mode='r') as terms:
         reader = csv.reader(terms, delimiter=delimiter)

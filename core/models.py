@@ -12,10 +12,11 @@ class Path:
 
 
 class Token:
-    def __init__(self, term: str, value: float, convergence: float = 0.0):
+    def __init__(self, term: str, value: float, convergence: float = 0.0, contexts = []):
         self.term = term.strip()
         self.value = float(value)
         self.convergence = float(convergence)
+        self.contexts = contexts.copy()
 
     def __hash__(self) -> int:
         return hash(self.__repr__())
@@ -30,8 +31,9 @@ class Token:
         return not self.__eq__(other)
 
     def __repr__(self) -> str:
-        return 'Token({term}, value={value}, convergence={conv})'.format(
+        return 'Token({term}, value={value}, convergence={conv}, contexts={contexts})'.format(
             term=self.term,
             value=self.value,
-            conv=self.convergence
+            conv=self.convergence,
+            contexts=self.contexts
         )

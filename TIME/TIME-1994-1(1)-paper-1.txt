@@ -1,0 +1,369 @@
+Lo calized Temp oral Reasoning A StateBased Approach ShieuHong LinandThomas Dean Department of Computer Science Brown UniversityProvidence RI  Abstract We are concerned with temp oral reasoning problems where there is uncertaintyabout the order in whichevents o ccur The task of temp oral reasoning is to deriveanevent sequence consistent with a given set of or dering constraints immediately following which one or more conditions havespec ied statusesPrevious researchshows that the asso ciated decision problems are hard even for very restricted casesIn this pap er we present a framework of lo calized temp oral reasoning which use sub goals and abstraction to exploit structure in temp oral ordering and causal interac tionWeinvestigate  lo cality regard ing ordering constraints that group events hierarchically into sets calledregionsand 	 lo cality regarding causal interactions among regions whichischaracterized by subsets of the set of conditions The com plexity for an instance of temp oral reason ing is quantied by the sizes of the charac teristic subsets of conditions and the num b ers of child regions of individual regions in the region hierarchy This demonstrates the p otential for substantial improvements
+in p erformance Intro duction We are interested in reasoning ab out a dynamical sys tem whose state is mo deled by a set of conditionsP Each condition has a status true or false at a given p oint in time and theevolution of the systemcorre sp onds to a sequence of state changes The evolution of the system dep ends on the interactions among a set of eventsEAneventeinEchanges the system state according to a set ofcausal rulesasso ciated withe A rule asso ciated with an eventeis a STRIPSlike op erator describing the causal e
+ects ofewhen the preconditions of the rule are satised In this way eachevent sp ecies a statetransition function on the state space determined byP The ordering of the events is uncertain The p ossible event sequences are determined by a given set of ordering constraints on
+the events Generallymanyevent orderings are p os sible eachofwhichmay result in a di
+erentevolution of the systemGiven the initial state and a set of goal conditions G the task oftemporal reachability is to  de tect the existence of a p ossible event sequence im mediately follo
+wing which the conditions inGhave sp ecied statuses and 	 generate one suchevent sequence if one existsIn other words the task of temp oral reachability is to predict the p ossibilityof reaching the goal states where the conditions inG have the sp ecied statuses and rep ort one p ossible event sequence which ends in the goal states For ex ample consider a partial plan where the ordering of the comp onents is constrained by some partial order Using temp oral reachabilitywe can co ordinate the comp onentevents to reach the goal states in a way consistent with the inherent ordering constraints On the other hand we can also apply temp oral reacha bilitytovalidate the partial plan by  sp ecifying the undesirable states as goal states where the set of goal conditions have the sp ecied statuses 	 detect ing the p ossibility of reaching undesirable states and  rep orting such a p ossible event sequence as evi dence This research extends the earlier work of Dean and Bo ddy  on reasoning ab out partially ordered events In sp ecial cases temp oral reasoning with uncer tainty ab out the ordering of events is harder than the corresp onding planning problem  This hap p ens b ecause in the corresp onding planning problem the planner is free to select an arbitrary set of event instances from a xed set of eventtyp es with no restrictions on the ordering of event instancesIn most cases if the events are not under the planners control howev
+er the problems are computationally equivalent Previous researchshows that the asso ci ated decision problems for temp oral reachability and planning are hard even for very restricted cases  	 Wehave b een trying to understand why temp oral reachability and planning are so dicult and what if any structure might b e extracted from such prob lems to exp edite decision making and inference  In this pap er wepresentaframework of lo calized temp oral reasoning Using this framework temp oral
+
+reachability is viewed as search in the global search spaces asso ciated with individual problem instances The sizes of the global search spaces are determined by  the total numb er of the conditions inPand 	 the total numb er of the events inE Our inves tigations have fo cused on the notions of lo calityin time and the structure of the search spaces Lo cality in time in a particular problem instance is mo deled
+by a hierarchyofregionsEach region is comp osed of an encapsulated event subset The events outside a regionRmust o ccur either b efore or after the events inRWe allows the child regions of a region to b e partially ordered Given a hierarchy of regions we can induce a set ofcoupling conditionsand a set of abstract conditionsfor each individual region which reect lo cality in the asso ciated search space and en able us to construct lo cal search spacesThe cou pling conditions of a regionRare the media for inter regional interactions b etween the events in di
+erent child regions ofR The abstract conditions of a re gionRare the media for the interactions b etween the ev
+ents in regionRand the events not inR Instead of search in the global search space we can search the lo cal search spaces and propagate the e
+ects of lo cal search The sizes of the sets of coupling condi tions and the numb ers of child regions of individual regions determine the complexity for an instance of temp oral reachability This research utilizes the notions of lo calized plan ning  subgoals  and abstraction 	  to exp edite temp oral reasoning The use of event based lo calized reasoning in planning has b een ad vo cated by Lansky in GEM In GEM lo cality regarding domain b ehavior is also mo deled byre gions Regions in GEM are comp osed of sets of interrelated events whose b ehaviors are delimited by eventbased temp oral logic constraints The GEM PLAN planner utilizes lo calized planning to exploit lo calityby sub dividing the global search space into regional search spacesIn this pap er weidentify the corresp onding notion of regions in the temp oral reachability problem which mo dels lo cality in time In addition we study the dep endencies b etween con ditions and regions and identify the coupling con ditions and the abstract conditions asso ciated with individual regionsThese structures mo del lo cality in search spaces The statebased approach allows us to use knowledge regarding subgoals abstract events and lo cal search spaces to conduct and analyze lo cal ized reasoning in a clear and elegantway The useful
+ness of subgoals macroop erators and abstraction in reducing the search e
+ort in planning has b een inves tigated by Korf  We identify subgoals and abstract events as useful knowledge for temp oral reachability We develop techniques to derive this critical knowl edge from individual temp oral reachability instances Our techniques are di
+erent from previous work on abstraction   inthat we transform encap sulated event subsets into abstract events instead of
+transforming individual op erators into abstract op er ators The Temp oral Reachability Problem An instance of the temp oral reachability problem is dened byhPIGEOi Pis a set of conditions mo deling the world state Each condition inPhas a status true or false at a given p oint in time Iis a set of conditionstatus pairs that sp ecies the initial statuses of each condition inP Gis a set of conditionstatus pairs that sp ec ies the goal statuses of all or a subset of the conditions inP Eis a set of events each of whose causal ef fects are represented by a set of causal rules A causal ruleris a STRIPSlike op erator which describ es the status c
+hanges of a subset of the conditions inPiethe consequent e
+ects when the conditions in another subset ofPhave the statues sp ecied byrie the antecedent requirementsIn this way eachevent deter mines a statetransition function on the state space mo deled byP Ois a set of arbitrary constraints onE The task of temp oral reachability is to  detect the existence of event sequences of sizejE jconsistent with Osuch that the goal sp ecied byGis achieved imme diately following the event sequences and 	 gener ate one suchevent sequence if one exists Figure  describ es an example problem instanceThe world state is mo deled by a set of conditions Pfa b c d e f  g  hg The initial state is describ ed byI All the con ditions are initially true except thathis false Efe 
+e
+e
+e
+e
+e
+gEacheventin
+Eis asso ciated with a causal rule while in general an event can b e asso ciated with multiple causal rules Figure 	 depicts the ordering constraints on EFor notational convenience weuseW as an alias name forEThe events in the three event subsetsXY andZmust o ccur as three atomic groups whereXfe 
+e
+g Yfe
+e
+gZfe
+e
+gThe events inY must o ccur b efore the events inXEvente  must o ccur b efore evente
+ Our task is to  determine the existence of event sequences consistentwithOsuch that the goalG fa f al se
+b f al sed f al see f al seh f al seg is achieved immediately following theevent se quences and 	 generate one suchevent sequence if one exists
+
+W
+YXe
+1     :   If a=true and b=true, 
+ then  c=true, a=false, b=false;
+otherwise, the statuses of all conditions
+remain unchanged.
+e
+2     :   If a=true and c=true, 
+ then  b=true, a=false, c=false;
+otherwise, the statuses of all conditions
+remain unchanged.
+e
+3     :   If d=true and e=true,
+ then   f=true, d=false, e=false;
+otherwise, the statuses of all conditions
+remain unchanged.
+e
+4     :   If d=true and f=true, 
+then  e=true, d=false, f=false;
+otherwise, the statuses of all conditions
+remain unchanged.
+Ze5
+otherwise, the statuses of all conditions
+remain unchanged.
+e
+6
+otherwise, the statuses of all conditions
+remain unchanged.
+     :   If a=false and d=true,
+then     a=true, d=false, g=false;
+     :   If a=true and d=false,
+ then   d=true, a=false, h=false;   Goal : {(a,false),(b,false)(d,false),(e,false),(h,false)}.Initial state:  {(a,true),(b,true),(c,true),(d,true),
+(e,true),(f,true),(g,true),(h,false)};
+Figure  An instance of the temp oral reachability problem
+W
+X
+YZ
+1ee2
+ee34
+e5
+e6
+Figure 	 Ordering constraints on events
+Lo calityin Temp oral Ordering Temp oral reachability turns out to b e NPComplete even if events are totally unordered ieO and the asso ciated state space is p olynomial in the size of the event set iejP jOlogjE j  This com plexity result motivates our e
+ort to exploit inherent lo cality regarding event ordering and the dep enden cies among conditions and events When totally unordered events can o ccur in arbi trary order However there is lo calityineventorder ing if the o ccurrences of events or subsets of events closely relate to one another In this pap er wecon sider lo calityin event ordering regardinghierarchical task networksWe dene a hierarchical task network as a partial plan suchthat the plan is organized as a hierarchy of tasks where an individual task may b e comp osed of subtasks that are also tasks in the hierarchy the subtasks of an individual task maybe con strained by some partial order and the leaf tasks of the task hierarchyareevents eachofwhichchanges the world states according
+to a set of asso ciated causal rules Each causal rule is a STRIPSlike op erator For example wemaybe working on several program ming tasks Each task is comp osed of a set of sub tasks including prototyp e design prototyp e testing problem reformulation etc such that each subtask involves a set of events that we wish to o ccur as a groupWeallow ourselves to switchbetween pro gramming tasks but once we b egin a subtask in a given programming task we commit to completing all of the events asso ciated with that subtask b efore switching to any other subtasks In the following we dene the concepts ofregions child regionsregion hierarchyandhierarchical or dering constraintsGiven a hierarchical task network lo calityin event ordering can b e abstractly mo deled by a hierarchy of regions and a set of hierarchical ordering constraints on the regions Denition Given a set of eventsE an event sub setXofEis a region inEif the events inXo
+ccur as an atomic group with the events outside the region occurring either before or after the events inside the regionEand each individual event inEareregions by themselves In a hierarchical task network a region mo dels the set of descendantevents ie leaf tasks of a task which always o ccur as an atomic groupIn other words each task is asso ciated with a region Denition Given a set of eventsE the regions in Eform a region hierarchy if for any two regions in E either they are disjoint or one is a proper subset of the other
+
+1e
+W
+eeeee
+XY
+Z
+2
+3
+4
+56
+Figure  A region hierarchy The events in a hierarchical task network form a re gion hierarchy since they have the prop erty describ ed in Denition 	 Denition In a region hierarchy regionXis a child region of another regionYifYis the smal lest region containingX For a taskk the regions asso ciated withks subtasks are the child regions of the region asso ciated withk Denition A hierarchical ordering constraint is a tuplehR iwhereRis a region fR 
+R
+gis the set of child regions ofR and is a partial order on The events inRi
+must occur befor
+e the events inRj
+ifRi
+Rj
+ A hierarchical ordering constraint mo dels a partial order on the subtasks of a taskIn our example problem instanceXfe 
+e
+g Yfe
+e
+gZfe
+e
+gWX
+SY
+SZand ev ery individual event are regions Figure  depicts the corresp onding region hierarchy The p ossible event sequences regarding our example problem instance are determined by the following hierarchical ordering constraintshXfe 
+e
+gfe 
+e
+gihYfe
+e
+gi hZfe
+e
+giandhWfX Y  ZgfYXgi Lo cality in Causal Interactions In this section we derive useful knowledge regarding the causal interactions among regions This knowl edge allows us to describ esubgoalsandabstractions for individual regions which yields a lo calized rea soning algorithm in next section Our investigation fo cuses on the causal dep endencies among regions and subsets of conditions Events that a
+ect all or even most conditions are rareAn event tends to a
+ect or b e a
+ected by a small subset of the set of con ditionsPWesay that a conditionpisdependent on an eventeif  eventemaychange the truth value of conditionpimmediately followingeor 	 the truth value of conditionpprior to eventemay a
+ect the truth values of some other conditions imme diately followinge otherwise wesay that condition
+pisindependentof evente Similarly a conditionp is dep endent on regionRifpis dep endent on at least one of the events encapsulated inR otherwisepis in
+Abstract conditions
+Coupling conditions
+Subgoal conditions
+Local conditions
+{a,b,c}
+{a,b,c}
+{}1e{a,b,c}
+{a,b,c}
+{} e
+2
+{}
+{}
+X{a}
+{a,b,c}
+{b,c}
+{b,c}
+{} e
+3
+{d,e,f}
+{d,e,f}
+{}{d,e,f}
+{d,e,f} e
+4
+{}{}
+{d}
+{d,e,f}
+Y
+{e,f}
+{e,f}
+e5
+{a,d}
+{a,d}
+{g}
+e6
+{a,d}
+{a,d}
+{h}
+Z{a,d}
+{a,d}
+{}
+{g}
+{h} {g,h}
+{a,d}
+W{}
+{a,b,c,d,e,f,g,h}
+{a,d}
+Figure  Characteristic condition subsets dep endentofRIfpis indep endentofRwedonot need to concern ourselves withpin reasoning ab out the changes caused byR In Figure  the conditions abcare dep endentoneventse 
+e
+and regionX while the conditionsdefghare indep endentof eventse 
+e
+and regionX Characteristic Condition Subsets In the following we generalize this notion of de p endency to characterize subsets of conditions for each individual regionRin a given problem instance namely  the set oflocal conditionsofR 	 the set ofsubgoal conditionsofR  the set ofabstract con ditionsofR and  the set ofcoupling conditions ofRThese subsets of conditions c
+haracterize the causal interactions among regionsFigure  shows suchknowledge derived from the example problem instance in Figure  Lo cal conditionsA conditionpis a lo cal condition of regionRifpis dep endentonRbut not dep endent on anyevents outsideR The statuses of the lo cal conditions ofRcan only a
+ect and b e a
+ected bythe events inR The initial statuses of the lo cal condi tions ofRwill not b e changed until the events inR o ccur and change their statuses Subgoal conditionsThe subgoal conditions ofR describethe regional subgoal inRA conditionpis a subgoal condition of regionRif pis a lo cal con
+
+dition ofRand	pis dep endent on more than one child region ofRifRhas more than one child region As so on as all the events inRo ccur the statuses of the subgoal conditions ofRwill not b e changed any more At that time the statuses of the subgoal con ditions must have the sp ecied conditions given by the goal of the problem instance This is the subgoal to b e achieved by the events inRFor example in Figure  the status of the subgoal conditiondin re gionYmust b e false immediately after regionYis nished
+Abstract conditionsWe use the know ledge of the abstract conditions of a regionRin deriving the ab straction ofRA conditionpis an abstract condition of regionRifpis  dep endent onatleast oneevent inRandalso 	 dep endent on at least one event not inR Both the events inRand the events out sideRcan a
+ect and b e a
+ected by the statuses of the abstract conditions ofR
+ Therefore the set of ab stract conditions ofRis the media for interregional interactions b etween the events inRand the events outsideRFor example in Figure  the eventse 
+ e
+in regionXinteract with the other events through the abstract conditionaofX Coupling conditionsIn next section we use the know ledge of the coupling conditions of a regionRin constructing the local search spaceforR A conditionpis a coupling condition of regionRif pis an abstract condition of regionRor	p is an abstract condition of one or more child regions ofR The coupling conditions ofRare the media for  the interregional interactions b etween the events inRand the events outsideR and 	 intraregional interactions among di
+erentchild regions ofRFor
+example in Figure  the three child regionsXY andZof regionWinteract with one another through the coupling conditionsadofW Subgoals and Abstractions Based on the knowledge of the sets of subgoal con ditions and abstract conditions of individual regions we dene the concepts of regional subgoals and the abstract events of individual regions which yields the lo calized reasoning algorithm in Section  Regional subgoals The statuses of the subgoal conditions ofRmust have the sp ecied statuses describ ed by the goal as so on as the events inRhave all o ccurred and the statuses of the subgoal conditions ofRwill not b e changed after that time Denition 	The regional subgoalGR
+is a subset of the goalGGR
+is composedoftheconditionstatus pairs inGwhose condition component is a subgoal condition of regionR Figure  depicts the regional subgoals regarding the example problem instance in Figure  By achiev
+{(a,false),(d,false)}
+WRegional subgoal
+X
+{(b,false)}Y
+{(e,false)}
+{(h,false)}
+e6
+Z
+{}
+{}
+1e
+{}
+e2
+{}
+e3
+{}
+e4
+{}
+e5
+Figure  Subgoals in individual regions ing the subgoal in every individual region the goal is achieved This describ es a problem decomp osition for temp oral reachability Our task in an individual regionRis to  achieve the subgoals in the children regions ofRrecursively 	 determine the ordering of the child regions ofR to achieve the regional subgoal ofR For example the subgoal forYisfe f al seg which indicates that the status of conditionemust b e false immediately after the events inYhave all o ccurred he
+e
+iis the only ordering ofe
+e
+to achievethis subgoal The abstractions of individual regions The e
+ects caused bythe events in a regionRare determined by  the initial statuses of the lo cal conditions ofR 	 the statuses of the abstract conditions ofRim mediately b efore the events inRoccur and  the ordering of the events inR whichcan be recursively describ ed by the orderings on the child regions ofR
+andRs descendant regions In general there are many p ossible orderings on the child regions ofRto achieve the subgoal in an individual regionR In order to achieve the subgoals in regionR  the set of abstract conditions ofRmust haveap propriate statuses immediately b efore anyevents in Ro ccur and 	 the child regions inRmust b e prop erly ordered In other words  whether or not an ordering on Rs child regions mayachieve the subgoal inRde p ends on the statuses of the abstract conditions of Rimmediately b efore the events inRo ccur and 	 in turn that ordering also a
+ects the statuses of the abstract conditions ofRafter achieving the subgoal inRAnabstract eventeR
+of a regionRprovides a causal abstraction ofRregarding howtoachievethe subgoal inRusing the events inR Denition 
+The abstract eventeR
+of a regionR is represented by a set of causal rules Each causal rule ofeR
+encodes one possibility regarding 	 the statuses of the abstract conditions ofRimmediately before any events inRoccur which represent the an tecedent requirements to achieve the subgoal and 
+
+X
+Y W
+eW:
+       If a=true and d=true,
+then a=false, d=false.
+e
+X     :   If a=true, 
+ then  a=false.eY     :   If d=true, 
+ then  d=false.
+Z
+eZ     :   If a=false and d=true,
+then   a=true, d=false;
+         If a=true and d=false,
+then   d=true, a=false.
+Figure  Abstract events for individual regions the statuses of the abstract conditions immediately af ter the regional subgoal is achieved by the events inR which represent the consequent eects The abstract eventeR
+is what weneedtorea son ab out the interregional interactions b etween the events inRand the events outsideR The deriva tion of abstract events for individual regions is inves tigated in Section Figure  depicts the abstract events of the individual regions in our example prob lem instance For example the abstract eventeY
+of regionYis asso ciated with a single rule This is b e cause  the subgoal forYisfe f al seg 	 when the conditiondis true immediately b eforee
+ande o ccur the event orderinghe
+e
+ican achieve the re gional subgoal and  when the conditiondis false immediately b eforee
+and
+e
+o ccur the subgoal can not b e achieved Lo calized Temp oral Reasoning Using Subgoals and Abstractions In this section we rst present temp oral reachability as search in global search spacesWe then investi gate the use of lo cal reasoning to exp edite temp o ral reasoning by exploiting the structure of a region hierarchy Finallywe demonstrate the p otential of substantial improvements in p erformance whichare quantied by the numb ers of child regions and the sizes of the sets of coupling conditions of individual regions 	Temp oral Reachabilityas Search Given an instance of the temp oral reachability prob lemhPIGEOiwe describ e the global search space as a directed graphGV A where Anode inVindicates  the state of the conditions inP ie the status ofpfor eachpinP and and 	 for eacheventeinE whetherehas o ccurred An edge u vin
+Amo dels the o ccurrence of an event ewhere ecan transform the statuses of the conditions in Pfrom the state indicated byuto the state indicated
+byv 	 no deuindicates thatehas not yet o ccurred while no devindicates thatehas o ccurred and ecan o ccur immediately after those events that are marked as o ccurred at no deuwithout violating the ordering constraints inO The task of temp oral reachability can b e viewed as search for a path from a ro ot no deu
+to anygoal no detwhere u
+is the no de in whichallevents are marked as not yet o ccurred and the conditions inPhavethe sp ecied initial statuses given byIand anodetis a goal no de if all events are indicated as o ccurred and the conditions have the statuses sp ec ied by the goalG Since an edge inGV A mo dels the o ccurrence of an event such a path corresp onds to a p ossible event sequence immediately follo
+wing which the conditions have the statuses sp ecied inG 	Lo cal Reasoning in Lo cal Search Spaces In the following we consider the kind of problem in stances hPIGEOi where the events inEform a region hierarchy according to a set of hierarchical ordering constraintOInstead of reasoning ab out  the whole set of events and 	 the whole set of conditions to achieve the goal we can conduct lo cal reasoning in each individual region ab out  the ab stract events of their child regions and 	 the set of coupling conditions to achieve the regional subgoal The goal is attained by incrementally achieving the regional subgoals This yields the following lo calized temp oral reasoning algorithms 	Constructing Lo cal Search Spaces For a regionR the lo cal search space ofRembeds the information regarding  howthe child regions ofRinteract with one another throughRs coupling conditions and 	 the ordering constraints on the child regions ofR Given  the abstract events of regionRs child regions and 	 the set of coupling conditions ofR we can constructRs lo cal searc
+h space as a directed graphGR
+VR
+AR
+ in the following way Construct a set of no desVR
+such that eachnode inVR
+enco des one p ossibility regarding  the statuses of the set of coupling conditions 	 for eachchild regionR
+ inR whether the events in R
+ as a whole have o ccurred Construct an edge u vinAR
+if there exists a child regionR
+ ofRsuch that eR
+  the abstract eventofR
+  can transform the statuses of the coupling conditions indicated
+bynodeuto the statuses indicated bynodev while achieving the subgoal inR
+  	 no deuindicates thatR
+ has not yet o ccurred while no devindicates thatR
+ has o ccurred and
+
+R
+ can o ccur immediately after those child regions that are marked as o ccurred at no de uwithout violating the ordering constraints on the child regions ofR Note that edgeu vmodels the occurrenceof the events in the child regionR
+ as a whole 	Deriving Abstract Events Given the lo cal search spaceGR
+VR
+AR
+ofa regionRwe dene the following twotyp es of no des inGR
+ Typ eI no desAnodevinVR
+isaTyp eI no de if all child regions ofRare marked as not yet o ccurred atv Typ eI no desAnodevinVR
+is a Typ eI I no de if  atv all child regions ofRare marked as o c curred and 	 atv the subgoal conditions ofRhav
+e the statuses sp ecied by the regional subgoal ofR Typ eI no des represent the p ossible statuses of the coupling conditions ofRimmediately b efore anychild region ofRo ccurs Typ eI I no des represent the p ossible statuses of the coupling conditions ofRimmediately after all child regions ofRo ccur and the regional subgoal ofRis attained Prop ertyThe local search spaceGR
+of a region Ris a directed acyclic graph A path inGR
+from a TypeI node to a TypeII node represents an ordering of the child regions ofRto achieve the regional sub goal inR Pro cedure RegionAbstraction Input the abstract events of the child regions of R 	 the regional subgoal ofR Outputif the regional subgoal ofRcan b e achieved rep ort the abstract eventeR
+ otherwise stop and re p ort failure in ac
+hieving the subgoal Construct the lo cal search spaceGR
+VR
+AR
+ Derive the reachability information b etween Typ eI no des and Typ eI I no des by searchingGR
+ If no Typ eI no des can reachTyp eI I no des stop and rep ort failure IfaTyp eI no deucan reachaTyp eI I no devwe enco de a rulerasso ciated with the abstract eventeR such that i the antecedent requirementofris that the ab stract conditions of regionRmust have the statuses indicated at no deuand ii the consequent e
+ect of ruleRis that the ab stract conditions of regionRmust have the statuses indicated at no dev 	Achieving Regional Subgoals For a regionR the following pro cedure generates a sequence of the events inRto achieve all the sub goals ofRandRs descendant regions
+Pro cedure GenerateSequence
+Input the statuses ofRs coupling conditions b efore the events inRo ccur 	 the abstract events and the subgoals ofRandRs descendant regions Outputa sequence of the events inRto achievethe subgoals ofRandRs descendant regions Search the lo cal searchspaceGR
+for a path from utovwhere iuis a Typ eI no de in whichRs coupling conditions have the sp ecied initial statuses and iivis a Typ eI I no deAccording to the derived path byProperty  derive i an ordering of the child regions ofR ii for eachchild regionR
+  ofR the statuses of the coupling conditions ofR
+  immediately b efore the events inR
+ o ccur For eachchild regionR
+ ofR recursively calls pro cedureGenerateSequenceto generate a sequence of the events inR
+ to ac
+hieves the regional subgoals of R
+ and the child regions ofR
+  According to the de rived ordering ofRs child regions concatenate these sequences to generate a sequence of the events inR 	A Lo calized Temp oral Reasoning Algorithm In the following we present a lo calized temp oral reasoning algorithm for temp oral reachability Pro cedure Lo calizedReasoning inputa problem instancehPIGEOiwhere the events inEform a region hierarchy outputif there exist p ossible event sequences to achieve the goal rep ort one such sequence otherwise rep ort failure in nding such a sequence Derivetheknowledge regarding the sets of ab stract conditions coupling conditions and subgoals of individual regions Starting from the b ottom level of the region hier archywe conduct lo cal reasoning describ ed in Step  for the regions at the same level resp ectively and then pro ceed in the same way level bylevel until we nish the lo cal reasoning in the ro ot region of the re gion hierarchy For each individual regionR call pro cedure RegionAbstracti
+onto derive the abstract event eR
+to achieve the regional subgoal ofR If the re gional subgoal can not b e achieved stop and rep ort failure otherwise propagate the knowledge ofeR
+to Rs parentregion In the ro ot region according to the initial statuses of the coupling conditions call pro cedureGenerate Sequenceto generate a solution event sequence 		Quantifying the Computation Eciency Theorem The time complexity of the localized temporal reasoning algorithm isO
+PR
+	
+BR
+	CR
+
+ whereBR
+andCR
+are the number of the child re gions and the number of the coupling conditions of an individual regionR Pro of SketchThe lo cal searchspaceGR
+
+
+VR
+AR
+isadirectedacyclicgraphofsize O	
+BR
+	CR To search the graph record and pro cess the reachability information it takesO	
+BR
+	CR
+
+ time and space  The lo calized reasoning algorithm is a p olynomial time algorithm ifBR
+andCR
+are ofOlogjE j size for each individual regionR Since temp oral reach ability is NPComplete  this demonstrates the p otential for dramatic improvements in p erformance by exploiting inherent lo cality which happ ens when the numb ers of child regions BR
+s and the sizes of the sets of coupling conditions CR
+s in individual regions are small with resp ect to the total number of eventsjE jand the total numb er of conditionsjP j The p erformance degrades to b e exp onential injE j when someBR
+orC
+R
+is ofOjE j size This is under our exp ectation since  a set of totally unordered events corresp onds to a single region containing the individual events as child regions and 	 temp oral reachability regarding totally unordered events is NP complete  	
+An example We illustrate the use of the lo calized reasoning al gorithm in solving our example problem instance in Figure First we derive causal knowledge and the subgoals for individual regions depicted in Figure  and Fig ure  resp ectivelyAt the b ottom level we conduct lo cal reasoning regarding the six events resp ectively which are regions by themselves The subgoal ine is thathmust b e false aftere
+o ccurs while wehave null subgoals for the other veevents The subgoal in e
+is always achieved sincee
+can only makehfalse andhis false initially At the second level of the region hierarchywecon duct lo cal reasoning regarding the regionsXYand Zresp ectively The subgoal in regionXY
+isthat bemust b e true false after all the events in re gionXY o ccur while wehavenull subgoal in re gionZWe call pro cedureRegionAbstractionto determine the abstract eventeX
+eY
+andeZ
+resp ec tively At the top level the subgoal inregionWis to make the conditionsaanddtrue after all events o ccur Here the child regionsXYandZare treated as the abstract eventseX
+eY
+eZ
+resp ectivelyWe call pro cedureRegionAbstractionto determineeW
+ Finallywe call pro cedureGenerateSequenceto derive a solution sequence given that the coupling conditionsaanddof regionWare initial true Pro ce dureGenerateSequencerecursiv
+ely generates the orderingheZ
+eY
+eX
+ihe
+e
+ihe 
+e
+iandhe
+e
+ifor the regionsWZYXresp ectivelyWe replace eZ
+eY
+andeX
+inheZ
+eY
+eX
+iwithhe
+e
+ihe 
+e
+i he
+e
+iresp ectively and derivehe
+e
+e 
+e
+e
+e
+i
+as a sequence to achieve the goal
+Conclusion Weinvestigate the lo cality in  the ordering con straints that group events hierarchically into sets calledregions and 	 the dep endencies among con ditions and regions This enables us to describ e sub goals and abstractions for individual regions Wede velop a lo calized temp oral reasoning algorithm to ex ploit lo cality and demonstrate the p otential for dra matic improvements in p erformance References Backstrom C and Klein I Parallel NonBinary Planning in Polynomial TimeProceedings IJ CAI 
+ Sydney Australia IJCAI I  	 	 	 Bylander Tom Complexity Results for Plan ningProceedings IJCAI 
+ Sydney Australia IJCAI I  		  ChapmanDavidPlanning for Conjunctive GoalsArticial Intel ligence   Christensen J A Hierarchical Planner that Generates its own Abstraction HierarchiesPro ceedings AAAI AAAI    Dean Thomas and Bo ddy Mark Reasoning Ab out Partially Ordered EventsArticial In tel ligence
+
+    Gupta Naresh and Nau Dana S Complexity Results for Blo cksWorld PlanningProceedings AAAI Anaheim California AAAI  	  Knoblo ck Craig A Search Reduction in Hier archical Problem SolvingProceedings AAAI Anaheim California AAAI    Korf Richard Planning as SearchA Quan titative ApproachArticial Intel ligence    LanskyAmy L Lo calized EventBased Reason ing for Multiagent DomainsComputational In tel ligence   Lin ShieuHong and Dean Thomas Exploiting Lo calityinTemp oral ReasoningProceedings of the Second European Workshop on Planning Vadstena Sweden   Neb el Bernhard and Backstrom Christer On the Computational Complexityof Temp oral Pro jection Planning and Plan ValidationArticial Intel ligence  To app ear 	 Sacerdoti Earl Planning in a HierarchyofAb straction SpacesArticial Intel ligence
+ 			  Yang Qiang and Tenenb erg Josh D Abtweak Abstracting a Nonlinear Least Commitment PlannerProceedings AAAI AAAI  		

@@ -1,0 +1,25 @@
+temporal reasoning;59.583332
+tempora;59.583332
+temporal reasoning algorithm;59.583332
+temporal queries;59.583332
+temporal constraints;59.583332
+temporal networks;59.583332
+temporal relationships;59.583332
+temporal logic;59.583332
+temporal functions;59.583332
+temporal world;59.583332
+time;59.583332
+linear time;59.583332
+time intervals;59.583332
+time complexity;59.583332
+time line;59.583332
+time point;59.583332
+discrete time;59.583332
+time axis;59.583332
+life time;59.583332
+certain time;59.583332
+time slice;59.583332
+hedgehog;59.583332
+minute;59.583332
+second;59.583332
+day;59.583332

@@ -19,6 +19,18 @@ def system_slash():
         return '\\'
     return '/'
 
+# ===== Remove stop words =====
+def remove_stop_words(context):
+    stop_words = ['is', 'a', 'A', 'will', 'be', 'for', 'the', 'on', 'to','in', 'of', '', 'and', 'by', 'that', 'an']
+    results = ''
+    tmp = context.split(' ')
+
+    for stop_word in stop_words:
+        if stop_word in tmp:
+            tmp.remove(stop_word)
+    results = " ".join(tmp)
+
+    return results
 
 def search_contexts_in_file(filename: str, token: Token) -> Token:
     contexts  = []
@@ -30,7 +42,9 @@ def search_contexts_in_file(filename: str, token: Token) -> Token:
                 #print("row: ", row)
                 if token.term in str(row):
                     #print("row: ", row)
-                    contexts.append(row)
+                    clean_row = remove_stop_words(row[0])
+                    #print("clean_row: ", clean_row)
+                    contexts.append(clean_row)
 
         except Exception as e:
               print("")

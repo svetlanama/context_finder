@@ -76,7 +76,9 @@ for token in input_tokens:
         #print('token:', token)
         for file in input_context_files:
                 #print('file:', token)
-                input_contexts = find_contexts(
+                input_token_contexts = find_contexts(
                     input_file=file, token=token
                 )
-        print("input_contexts: ",input_contexts)
+        print("input_token_contexts: ",input_token_contexts)
+ 
+# Start training

@@ -51,7 +51,7 @@ def search_contexts_in_file(filename: str, token: Token) -> Token:
               #print("Exception read: ",e)
 
     #print("contexts: ", contexts)
-    yield Token(
+    return Token(
         term=token.term,
         value=token.value,
         convergence=token.convergence,

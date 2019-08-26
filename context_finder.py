@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
+# skip-gramm model
+# REPO: https://github.com/minsuk-heo/python_tutorial/blob/master/data_science/nlp/word2vec_tensorflow.ipynb
+
 import os
 
 from core import (
@@ -79,8 +82,12 @@ for token in input_tokens:
                 input_token_contexts = find_contexts(
                     input_file=file, token=token
                 )
-                formed_token_contexts.append(input_token_contexts)
-        print("input_token_contexts: ",input_token_contexts)
+                if not input_token_contexts.contexts:
+                    print("no context: ", input_token_contexts)
+                else:
+                    print("has context: ", input_token_contexts)
+                    formed_token_contexts.append(input_token_contexts)
+        #print("input_token_contexts: ",input_token_contexts)
 
 print("formed_token_contexts: ",formed_token_contexts)
 
@@ -96,6 +103,7 @@ for token in formed_token_contexts:
             words.append(word)
 
 words = set(words) # our sample
+#TODO: the phrases are lost
 print('######## words ############', words)
 
 # ===== Data generation =====
@@ -217,12 +225,13 @@ for i in range(iteration):
 
 # Now the hidden layer (W1 + b1) is actually the word look up table
 vectors = sess.run(W1 + b1)
-print("vectors: ", vectors[:100])
+print("vectors: ", vectors)
 
 # word vector in table
 w2v_df = pd.DataFrame(vectors, columns = ['x1', 'x2'])
 w2v_df['word'] = words
 w2v_df = w2v_df[['word', 'x1', 'x2']]
+pd.set_option('display.max_rows', 1000)
 print(w2v_df)
 
 ###########
@@ -268,7 +277,7 @@ for index,word in enumerate(words):
 features = []
 for token in input_tokens:
         print('token:', token.term)
-        features.append(token.term)
+        features.append(files.replace_term_phrase_with_dash(token.term))
 print('features:', features)
 
 # DISPLAY nearby 10

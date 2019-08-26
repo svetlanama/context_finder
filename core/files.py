@@ -19,6 +19,23 @@ def system_slash():
         return '\\'
     return '/'
 
+# ===== Replace term with dash   =====
+def replace_term_phrase_with_dash(term):
+    tmp = term.split(' ')
+    new_term = "_".join(tmp)
+
+    return new_term
+
+# ===== Replace phrases with dash   =====
+# TODO: figure out other phrases:
+def replace_context_phrases_with_dash(term, context):
+    result = context
+    tmp = term.split(' ')
+    new_term = "_".join(tmp)
+
+    result.replace(term, new_term)
+    return result
+
 # ===== Remove stop words =====
 def remove_stop_words(context):
     stop_words = ['is', 'a', 'A', 'will', 'be', 'for', 'the', 'on', 'to','in', 'of', '', 'and', 'by', 'that', 'an']
@@ -32,6 +49,7 @@ def remove_stop_words(context):
 
     return results
 
+#TODO: not all context are founded - the opened file is not reading till the end
 def search_contexts_in_file(filename: str, token: Token) -> Token:
     contexts  = []
     with open(filename, mode='r') as datafile:
@@ -39,10 +57,13 @@ def search_contexts_in_file(filename: str, token: Token) -> Token:
 
         try:
             for row in reader:
+                #print("token.term: ", token.term)
                 #print("row: ", row)
+
                 if token.term in str(row):
                     #print("row: ", row)
                     clean_row = remove_stop_words(row[0])
+                    clean_row = replace_context_phrases_with_dash(token.term, clean_row)
                     #print("clean_row: ", clean_row)
                     contexts.append(clean_row)
 
@@ -52,7 +73,7 @@ def search_contexts_in_file(filename: str, token: Token) -> Token:
 
     #print("contexts: ", contexts)
     return Token(
-        term=token.term,
+        term=replace_term_phrase_with_dash(token.term), #token.term,
         value=token.value,
         convergence=token.convergence,
         contexts=contexts

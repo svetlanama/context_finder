@@ -75,7 +75,7 @@ def find_contexts(input_file, token):
 
 # read contexts
 formed_token_contexts = []
-for token in input_tokens:
+for token in input_tokens:#[:1]
         #print('token:', token)
         for file in input_context_files:
                 #print('file:', token)
@@ -103,7 +103,6 @@ for token in formed_token_contexts:
             words.append(word)
 
 words = set(words) # our sample
-#TODO: the phrases are lost
 print('######## words ############', words)
 
 # ===== Data generation =====
@@ -157,19 +156,43 @@ ONE_HOT_DIM = len(words)
 # ONE_HOT_DIM is dimenstion of vector
 # data_point_index is the position of vector
 def to_one_hot_encoding(data_point_index):
-    one_hot_encoding = np.zeros(ONE_HOT_DIM)
-    one_hot_encoding[data_point_index] = 1
-    #print("\n one_hot_encoding: ", one_hot_encoding)
-    return one_hot_encoding
+    try:
+        print("0 data_point_index: ", data_point_index)
+        one_hot_encoding = np.zeros(ONE_HOT_DIM)
+        print("1 data_point_index: ", one_hot_encoding)
+        one_hot_encoding[data_point_index] = 1
+        print("2 data_point_index: ", one_hot_encoding)
+        #print("\n one_hot_encoding: ", one_hot_encoding)
+        return one_hot_encoding
+    except Exception as e:
+        print("Exception to_one_hot_encoding: ",e)
+        return -1
 
 # build encodedvectors of words and their neighbours
 X = [] # input word
 Y = [] # target word
 
 for x, y in zip(df['input'], df['label']):
-    #print("\n x: ", x, " y: ", y)
-    X.append(to_one_hot_encoding(word2int[ x ])) # word
-    Y.append(to_one_hot_encoding(word2int[ y ])) # word neigbour
+    print("\n x: ", x, " y: ", y)
+    x_word2int = -1
+    y_word2int = -1
+
+    try:
+        x_word2int = word2int[ x ]
+    except Exception as e:
+        print("Exception word2int: ",e)
+
+    try:
+        y_word2int = word2int[ y ]
+    except Exception as e:
+        print("Exception word2int: ",e)
+
+    if x_word2int != -1 and y_word2int != -1:
+        x_to_one_hot_encoding = word2int[ x ]
+        y_to_one_hot_encoding = word2int[ y ]
+        if x_to_one_hot_encoding != -1 and y_to_one_hot_encoding != -1:
+            X.append(to_one_hot_encoding(word2int[ x ])) # word
+            Y.append(to_one_hot_encoding(word2int[ y ])) # word neigbour
 
 # print("\n X: ", X)
 # print("\n Y: ", Y)

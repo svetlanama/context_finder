@@ -41,7 +41,7 @@ def replace_context_phrases_with_dash(term, context):
 
     # find and replace other phrases
     noun_phrases = blob.noun_phrases
-    for phrase in noun_phrases:)
+    for phrase in noun_phrases:
         tmp_phrase_arr = phrase.split(' ')
         new_phrase = "_".join(tmp_phrase_arr)
         result = result.replace(phrase, new_phrase)

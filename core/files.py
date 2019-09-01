@@ -2,6 +2,7 @@ import operator
 import glob
 import csv
 import sys
+from textblob import TextBlob
 
 from typing import (
     Iterator,
@@ -29,11 +30,22 @@ def replace_term_phrase_with_dash(term):
 # ===== Replace phrases with dash   =====
 # TODO: figure out other phrases:
 def replace_context_phrases_with_dash(term, context):
+    blob = TextBlob(context)
     result = context
+    result = result.replace("- ", "") # remove artifacts
+
+    # replace term
     tmp = term.split(' ')
     new_term = "_".join(tmp)
-
     result.replace(term, new_term)
+
+    # find and replace other phrases
+    noun_phrases = blob.noun_phrases
+    for phrase in noun_phrases:)
+        tmp_phrase_arr = phrase.split(' ')
+        new_phrase = "_".join(tmp_phrase_arr)
+        result = result.replace(phrase, new_phrase)
+
     return result
 
 # ===== Remove stop words =====

@@ -123,7 +123,7 @@ for token in formed_token_contexts:
 print('######## sentences ############', sentences)
 
 # define window size
-WINDOW_SIZE = 2
+WINDOW_SIZE = 1 #2
 
 data = []
 for sentence in sentences:
@@ -149,6 +149,7 @@ print("shape: ", df.shape)
 import tensorflow as tf
 import numpy as np
 
+# Build INPUT layer (one hot vector) - embedding
 ONE_HOT_DIM = len(words)
 
 # function to convert numbers to one hot vectors
@@ -157,11 +158,8 @@ ONE_HOT_DIM = len(words)
 # data_point_index is the position of vector
 def to_one_hot_encoding(data_point_index):
     try:
-        print("0 data_point_index: ", data_point_index)
         one_hot_encoding = np.zeros(ONE_HOT_DIM)
-        print("1 data_point_index: ", one_hot_encoding)
         one_hot_encoding[data_point_index] = 1
-        print("2 data_point_index: ", one_hot_encoding)
         #print("\n one_hot_encoding: ", one_hot_encoding)
         return one_hot_encoding
     except Exception as e:
@@ -173,7 +171,7 @@ X = [] # input word
 Y = [] # target word
 
 for x, y in zip(df['input'], df['label']):
-    print("\n x: ", x, " y: ", y)
+    #print("\n x: ", x, " y: ", y)
     x_word2int = -1
     y_word2int = -1
 
@@ -201,24 +199,28 @@ for x, y in zip(df['input'], df['label']):
 X_train = np.asarray(X)
 Y_train = np.asarray(Y)
 
-# print("\n X_train: ", X_train)
-# print("\n Y_train: ", Y_train)
+print("\n X_train: ", X_train)
+print("\n Y_train: ", Y_train)
 
 # making placeholders for X_train and Y_train
 x = tf.placeholder(tf.float32, shape=(None, ONE_HOT_DIM))
 y_label = tf.placeholder(tf.float32, shape=(None, ONE_HOT_DIM))
 
+# Build HIDDEN layer (linear neuron)
 # word embedding will be 2 dimension for 2d visualization
 EMBEDDING_DIM = 2
 
 # hidden layer: which represents word vector eventually
-# https://en.wikipedia.org/wiki/Cross_entropy - very common to cpst function
+# https://en.wikipedia.org/wiki/Cross_entropy - very common to cost function
 # https://www.youtube.com/watch?v=tRsSi_sqXjI
 W1 = tf.Variable(tf.random_normal([ONE_HOT_DIM, EMBEDDING_DIM]))
 b1 = tf.Variable(tf.random_normal([1])) #bias -  systematic error. https://en.wikipedia.org/wiki/Bias
 hidden_layer = tf.add(tf.matmul(x,W1), b1)
+print("hidden_layer W1: ", W1)
+print("hidden_layer b1: ", b1)
+print("hidden_layer: ", hidden_layer)
 
-# output layer
+# Build OUTPUT layer (softmax)
 W2 = tf.Variable(tf.random_normal([EMBEDDING_DIM, ONE_HOT_DIM]))
 b2 = tf.Variable(tf.random_normal([1]))
 prediction = tf.nn.softmax(tf.add( tf.matmul(hidden_layer, W2), b2))

@@ -1,0 +1,44 @@
+A Query Calculus for Spatio-Temporal Object Databases Tony Grifths, Alvaro A.
+A.
+Fernandes, Nassima Djafri, Norm an W.
+Paton Department of Computer Science, University of Manchester Oxford Road, Manchester M13 9PL, United Kingdom fgriffittja.fernandesjndjafrijnormg@cs.man.ac.uk Abstract The development of any comprehensive proposal for spatio-temporal databases involves signicant extension s to many aspects of a non-spatio-temporal architecture.
+One  aspect that has received less attention than most is the de-  velopment of a query calculus that can be used to pro-  vide a semantics for spatio-temporal queries and underpin  an effective query optimization and evaluation framework.
+ In this paper, we show how a query calculus for spatiotemporal object databases that builds upon the monoid cal-  culus proposed by Fegaras and Maier for ODMG-compliant  database systems can be developed.
+The paper shows how an extension of the ODMG type system with spatial and  temporal types can be accommodated into the monoid ap-  proach.
+It uses several queries over historical (possibly s patial) data to illustrate how, by mapping them into monoid comprehensions, the way is open for the application of a logical optimizer based on the normalization algorithm pro - posed by Fegaras and Maier.
+ 1.
+Introduction Spatio-temporal databases have been the focus of considerable research activity over a signicant period.
+How-  ever, there still exist very few prototypes of complete sys-  tems (see [4] for a mid-1990s survey), and far less prod-  ucts that provide effective support for applications track ing changes to spatial and aspatial data over time.
+This is prob-  ably because the design and implementation of a complete  spatio-temporal database is a challenging undertaking, in - volving extensions to all aspects of a non-spatio-temporal  architecture ? data model, query language, query optimizer , query evaluator, programming environment, storage manager, indexes, etc.
+The diversity of open issues relating to  such an undertaking has led most researchers to focus on specic aspects of the problem (e.g., indexing, or join algo - rithms), rather than addressing the development of a complete spatio-temporal DBMS.
+This has given rise to a sub- stantial collection of results that can be built upon by deve lopers of complete systems, although such an endeavour has  been pursued only rarely.
+The Tripod project, from which  this paper emerges, is seeking to design and prototype a  complete spatio-temporal database system that extends the  ODMG standard for object databases [6] with facilities for managing vector spatial data, and for the description of pas t states of both spatial and aspatial data.
+ODMG Model Temporal Types Spatial TypesHistories Spatio-Temporal Algebra Spatio-Temporal Calculus Extended OQL Figure 1.
+Tripod Components Figure 1 illustrates the relationships between the different components in the Tripod design.
+At the core is the  ODMG object model.
+The ODMG model is extended in  Tripod with two new categories of primitive type: spatial  types and temporal types.
+The spatial types used in Tri-  pod are those of the ROSE algebra [15], which supports the vector types Points,Lines andRegions .
+The temporal types supported in Tripod are one-dimensional versions of the ROSE algebra types PointsandLines , and are known as InstantsandTimeIntervals , respectively.
+The close relationship between the spatial and the temporal types increases consistency in the representatio n of the different kinds of data.
+Past states of all ODMG types, including the spatial and temporal types, can be recorded using histories.
+A historyis a set of timestamp-value pairs, where the timestamp is of a temporal type and the value is of any of the types in the extended ODMG model.
+Figure 1,  fromHistories inwards represents a spatio-historical object model.
+This, however, leaves open the question as to how the resulting model can be queried, and how these queries can  both be given a precise semantics and be effectively optimized.
+In this regard, the monoid comprehension calculus  of [8] is extended in Tripod to accommodate the querying of  spatial and temporal data.
+In Figure 1, this is illustrated b y the layers representing the query algebraand thequery calculus , the former being derived from the latter using mappings described in [8].
+The focus of this paper is on the  query calculus layer in Figure 1.
+This layer is important,  in that it provides a semantics for historical queries in object databases, and also because its incorporation within t he monoid comprehension calculus of [8] allows the reuse of the associated query optimization framework, as supported  by the OPTGEN query optimizer generator.
+The changes  to the calculus for OQL provided in [8] to support spatial, temporal and historical features are pure extensions (i.e.
+, the existing calculus is retained as a subset), and the extensio ns can be used together or separately in queries.
+Figure 2 presents an example of a class denition that illustrates the sort of database that can be described using  the model.
+The class Cityis itself historical, which means that the duration for which a Cityexists is recorded.
+Of the three properties of City, thename attribute is not historical (and thus only the last value assigned to the name is stored), the electionsattribute is not historical but does store values of a temporal type, the attribute wards is collection-valued, the mayorattribute is historical, and the landmass attribute is both historical (so previous as well as current values for the landmass are stored) and of a  spatial type.
+For reasons of space, the denition of the clas s Ward is omitted.
+historical<TimeIntervals,year> class City  (extent cities)  attribute string name;  attribute <Instants,year> elections;  attribute set<Ward> wards;  historical<TimeIntervals,month> attribute string mayor; historical<TimeIntervals,year> attribute Regions landmass;  Figure 2.
+Example Spatio?Historical ODL The remainder of the paper is structured as follows.
+Section 2 provides an overview of the structure of Tri-  pod timestamps, snapshots and histories (as well as their  behaviour) by construing them as instances of abstract  data types (ADT).
+Section 3 provides an overview of the monoid comprehension approach to query processing in object databases.
+Section 4 shows how the constructs in Sec-  tion 2 can be incorporated into the framework described in  Section 3 to give rise to a query calculus for historical obje ct databases.
+Section 5 provides examples of use, including  how queries requiring aggregation over historical attribu tes can be expressed.
+Section 6 discusses related work.
+Section 7 draws some of the conclusions stemming from the  contributions of the paper.

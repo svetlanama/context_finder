@@ -3,8 +3,8 @@ import glob
 import csv
 import sys
 from textblob import TextBlob
-import io
-import re
+#import io
+#import re
 
 from typing import (
     Iterator,
@@ -114,7 +114,7 @@ def remove_stop_words(context):
 #TODO: not all context are founded - the opened file is not reading till the end
 def search_contexts_in_file(filename: str, token: Token) -> Token:
     contexts  = []
-    print("Default buffer size:",io.DEFAULT_BUFFER_SIZE)
+    #print("Default buffer size:",io.DEFAULT_BUFFER_SIZE)
 
     file=open(filename, mode="r", buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None)
     print("line_buffering: ",file.line_buffering)

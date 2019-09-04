@@ -123,7 +123,7 @@ for token in formed_token_contexts:
 print('######## sentences ############', sentences)
 
 # define window size
-WINDOW_SIZE = 1 #2
+WINDOW_SIZE = 2
 
 data = []
 for sentence in sentences:
